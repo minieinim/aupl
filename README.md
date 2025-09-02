@@ -18,3 +18,8 @@ out;
 ```
 ." Hello World"
 ```
+Use `:` to define a function
+```
+:helloWorld "Hello World" out.
+```
+No `;` is needed to end a function definition.
