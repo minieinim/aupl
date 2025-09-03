@@ -67,10 +67,10 @@ def run(tokens):
  global stack,udk,__repl
  if not isinstance(tokens,tuple): return ("error","`parse` function expected a tuple of string")
  if tokens[0]=="error": return tokens[1]
- builtinKeyword=("out","rout","dup","pop","exit")
+ builtinKeyword=("help","out","rout","dup","pop","exit")
  kwbod=[]
  afterKwDef=ifTrue=False
- a=b=""
+ a=msg=""
  c=i=0
  while i<len(tokens):
   if tokens[i][0]=="constant":
@@ -80,18 +80,21 @@ def run(tokens):
     i+=1
   if i<len(tokens):
    if tokens[i][0]=="name":
-    if tokens[i][1]=="out":
-     try: print(stack.pop()[1:],end="")
-     except IndexError: return ("error","`out` keyword has no data to print")
+    if tokens[i][1]=="help":
+     if not __repl: return ("error","'help' only works in REPL mode")
+     msg="keywords:\n"+"help - shows this message (only works in REPL)\n"+"out  - pops and prints last element in stack\n"+"rout - pops and prints first element in stack\n"+"pop  - pops lasy element in stack\n"+"dup  - duplicate last element in stack\n"+"exit - stops execution\n"
+    elif tokens[i][1]=="out":
+     try: msg+=stack.pop()[1:]
+     except IndexError: return ("error","'out' keyword has no data to print")
     elif tokens[i][1]=="rout":
-     try: print(stack.pop(0)[1:],end="")
-     except IndexError: return ("error","`out` keyword has no data to print")
+     try: msg+=stack.pop(0)[1:]
+     except IndexError: return ("error","'out' keyword has no data to print")
     elif tokens[i][1]=="dup":
      try: stack.append(stack[-1])
-     except IndexError: return ("error","`dup` keyword has no data to copy")
+     except IndexError: return ("error","'dup' keyword has no data to copy")
     elif tokens[i][1]=="pop":
      try: stack.pop()
-     except IndexError: return ("error","`pop` keyword has no data to pop")
+     except IndexError: return ("error","'pop' keyword has no data to pop")
     elif tokens[i][1]=="if":
      i+=1
      if i>len(tokens): return ("error","'if' expected statement(s)")
@@ -226,6 +229,7 @@ def run(tokens):
    if i>=len(tokens) or tokens[i][0]!="eol":
     __repl=True
     return ("error","Expected a semicolon (;)")
+   if msg!="": print(msg,end=""); msg=""
   afterKwDef=False
   ifTrue=False
   i+=1
