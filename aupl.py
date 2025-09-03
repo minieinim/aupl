@@ -81,14 +81,14 @@ def run(tokens):
   if i<len(tokens):
    if tokens[i][0]=="name":
     if tokens[i][1]=="help":
-     if not __repl: return ("error","'help' only works in REPL mode")
+     if not __repl: return ("error","'help' only works in REPL")
      msg="keywords:\n"+"help - shows this message (only works in REPL)\n"+"out  - pops and prints last element in stack\n"+"rout - pops and prints first element in stack\n"+"pop  - pops lasy element in stack\n"+"dup  - duplicate last element in stack\n"+"exit - stops execution\n"
     elif tokens[i][1]=="out":
      try: msg+=stack.pop()[1:]
      except IndexError: return ("error","'out' keyword has no data to print")
     elif tokens[i][1]=="rout":
      try: msg+=stack.pop(0)[1:]
-     except IndexError: return ("error","'out' keyword has no data to print")
+     except IndexError: return ("error","'rout' keyword has no data to print")
     elif tokens[i][1]=="dup":
      try: stack.append(stack[-1])
      except IndexError: return ("error","'dup' keyword has no data to copy")
